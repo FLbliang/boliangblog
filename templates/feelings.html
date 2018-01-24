@@ -1,0 +1,112 @@
+{% extends 'public.html' %}
+
+{% block title %}Feelings{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="/static/css/public.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/study.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/feelings.css" />
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="col-md-8 body-left">
+        <div class="panel">
+            <div class="panel-heading">
+                <h1 class="text-center">My Feelings</h1>
+            </div>
+            <div class="panel-body article-list">
+                <ul class="media-list">
+                    {% for article in articles.object_list %}
+                    <li class="media">
+                        <a href="{% url 'articles_manage:article' %}?sort={{article_sort.id}}&id={{article.id}}">
+
+                            <div class="media-object col-md-2">
+                                <img src="/media/{{article.image}}" class="img-rounded" />
+                            </div>
+                            <div class="col-md-10">
+                                <h3 class="media-heading">
+                                    {{article.name}}
+                                    <small class="pull-right">{{article.sort}}</small>
+                                </h3>
+                                <p>{{article.desc}}</p>
+                            </div>
+
+                            <div class="media-bottom pull-right">
+                                <h4>{{article.add_time}}</h4>
+                            </div>
+                        </a>
+                    </li>
+                   {% endfor %}
+                </ul>
+            </div>
+
+            <div class="row text-center">
+                <ul class="pagination">
+                   {% if articles.has_previous %}
+                    <li>
+                        <a href="?{{articles.previous_page_number.querystring}}" aria-label="Previous">
+                            <span aria-hidden="true">上一页</span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for page in articles.pages %}
+                        {% if page %}
+                        <li class="{% ifequal page articles.number %}active{% endifequal %}">
+                            <a href="?{{page.querystring}}">{{page}}</a>
+                        </li>
+                        {% else %}
+                        ...
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if articles.has_next %}
+                    <li>
+                        <a href="?{{articles.next_page_number.querystring}}" aria-label="Next">
+                            <span aria-hidden="true">下一页</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-4 body-right">
+        <div class="jumbotron">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3>Scenery</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        {% for scenery_image in scenery_images %}
+                        <img src="/media/{{scenery_image.image}}" class="img-rounded" />
+                       {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3>最新文章</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group panel-list">
+                        {% for new_article in new_articles %}
+                        <li class="list-group-item">
+                            <a class="title" href="{% url 'articles_manage:article' %}?id={{new_article.id}}">
+                                <span class="pull-left">{{new_article.name}}</span>
+                                <span class="pull-right">{{new_article.add_time}}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

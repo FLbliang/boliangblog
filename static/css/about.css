@@ -1,0 +1,15 @@
+.img-me img {
+	width: 200px;
+	height: 1.722*300px;
+	box-shadow: 0px 0px 60px dodgerblue;
+}
+
+.desc-body {
+	border-radius: 10px;
+	background: rgba(0, 0, 0, 0.4);
+	color: #FFFFFF;
+	/*min-height: 300px;*/
+	padding: 10px;
+	box-shadow: 0px 0px 50px yellow;
+	text-indent: 28px;
+}

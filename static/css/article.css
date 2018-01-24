@@ -1,0 +1,87 @@
+.main {
+	background: url(../img/article_background.jpg) no-repeat;
+	background-size: cover;
+}
+
+.body-right .btn-group {
+	padding: 0px;
+	margin: 0px;
+}
+
+.body-right .panel-body {
+	padding: 6px;
+}
+
+.body-right .btn-group li {
+	margin: 10px auto;
+}
+
+.article-class-btn-color-1 {
+	color: #f2e661;
+	box-shadow: 0px 0px 30px #f2e661;
+}
+
+.article-class-btn-color-2 {
+	color: deepskyblue;
+	box-shadow: 0px 0px 10px deepskyblue;
+}
+
+.article-class-btn-color-3 {
+	color: orangered;
+	box-shadow: 0px 0px 10px orangered;
+}
+
+.article-class-btn-color-4 {
+	color: #d4f3d7;
+	box-shadow: 0px 0px 20px greenyellow;
+}
+
+.body-right .btn-group .btn {
+	font-weight: 900;
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.body-right .btn-group .btn:hover {
+	box-shadow: 0px 0px 20px #FFFFFF;
+	color: #FFFFFF;
+}
+
+.body-left .article-container{
+	box-shadow: 0px 0px 50px deeppink;
+	border-radius: 20px;
+	background: rgba(255, 255, 255, 0.9);
+}
+
+.body-left .article-title .title{
+	color: #C7254E;
+	font-weight: 700;
+}
+
+.body-left .article-title .time{
+	color: #3C3C3C;
+	font-weight: 700;
+}
+
+.body-left .article-body{
+	max-width: 94%;
+	overflow: hidden;
+}
+
+.body-left .article-body img{
+    max-width: 100%;
+}
+
+.body-left .article-footer .good-click span{
+	font-size: 30px;
+	cursor: pointer;
+}
+
+.body-left .comments-page h3{
+	color: #F2E661;
+	text-shadow: 0px 0px 30px red;
+}
+
+.body-left .media-list .media-heading{
+	color: #262626;
+	text-shadow: 0px 0px 30px #C7DDEF;
+}

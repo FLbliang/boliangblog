@@ -1,0 +1,148 @@
+{% extends 'public.html' %}
+
+{% block title %}Study {{article_sort.name}}{% endblock %}
+
+{% block keywords %}{{article_sort.name}} {% endblock %}
+
+{% block desc %}{{article_sort.name}} {% endblock %}
+
+{% block name %}{{article_sort.name}} {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="/static/css/public.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/study.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/sort.css"/>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="col-md-8 body-left">
+        <div class="panel">
+            <div class="current-position clearfix">
+                <h4 class="col-md-2 text-right">当前位置</h4>
+                <ul class="col-md-10 btn-group">
+                    <li class="pull-left">
+                        <span>——</span>
+                        <a href="{% url 'articles_manage:study' %}" class="btn">study</a>
+                    </li>
+                    <li class="pull-left">
+                        <span>——</span>
+                        <a href="?sort={{article_sort.id}}" class="btn">{{article_sort.name}}</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="panel-heading">
+                <h1 class="text-center">Articles of <span>{{article_sort.name}}</span></h1>
+            </div>
+            <div class="panel-body article-list">
+                <ul class="media-list">
+                    {% for article in articles.object_list %}
+                    <li class="media">
+                        <a href="{% url 'articles_manage:article' %}?sort={{article_sort.id}}&id={{article.id}}">
+
+                            <div class="media-object col-md-2">
+                                <img src="/media/{{article.image}}" class="img-rounded" />
+                            </div>
+                            <div class="col-md-10">
+                                <h3 class="media-heading">
+                                    {{article.name}}
+                                    <small class="pull-right">{{article.sort}}</small>
+                                </h3>
+                                <p>{{article.desc}}</p>
+                            </div>
+
+                            <div class="media-bottom pull-right">
+                                <h4>{{article.add_time}}</h4>
+                            </div>
+                        </a>
+
+                    </li>
+                   {% endfor %}
+                </ul>
+            </div>
+
+            <div class="row text-center">
+                <ul class="pagination">
+                    {% if articles.has_previous %}
+                    <li>
+                        <a href="?{{articles.previous_page_number.querystring}}" aria-label="Previous">
+                            <span aria-hidden="true">上一页</span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for page in articles.pages %}
+                        {% if page %}
+                        <li class="{% ifequal page articles.number %}active{% endifequal %}">
+                            <a href="?{{page.querystring}}">{{page}}</a>
+                        </li>
+                        {% else %}
+                        ...
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if articles.has_next %}
+                    <li>
+                        <a href="?{{articles.next_page_number.querystring}}" aria-label="Next">
+                            <span aria-hidden="true">下一页</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+   <div class="col-md-4 body-right">
+        <div class="jumbotron">
+            <div class="panel">
+                <div class="panel-heading" style="background: transparent;">
+                    <img src="/media/{{about_me.head_image}}" class="img-circle img center-block" />
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group desc-me">
+                        <li class="list-group-item">
+                            OWNER: <span>{{about_me.name}}</span>
+                        </li>
+                        <li class="list-group-item">
+                            AGE: <span>{{about_me.age}}</span>
+                        </li>
+                        <li class="list-group-item">
+                            JOB: <span>{{about_me.job}}</span>
+                        </li>
+                        <li class="list-group-item">
+                            HOBBIES: <span>{{about_me.hobbies}}</span>
+                        </li>
+                        <li class="list-group-item">
+                            MOTTO: <span>{{about_me.motto}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3>最新文章</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group panel-list">
+                        {% for new_article in new_articles %}
+                        <li class="list-group-item">
+                            <a class="title" href="{% url 'articles_manage:article' %}?id={{new_article.id}}">
+                                <span class="pull-left">{{new_article.name}}</span>
+                                <span class="pull-right">{{new_article.add_time}}</span>
+                            </a>
+                        </li>
+                       {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+

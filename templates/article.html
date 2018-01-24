@@ -1,0 +1,300 @@
+{% extends 'public.html' %}
+
+{% block keywords %}{{article.name}},{{article.sort}} {% endblock %}
+
+{% block desc %}{{article.name}},{{article.sort}} {% endblock %}
+
+{% block name %}{{article.name}},{{article.sort}} {% endblock %}
+
+{% block title %}{{article.name}}{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="/static/css/public.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/study.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/sort.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/message.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/article.css" />
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/message.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/goodclick.js" type="text/javascript" charset="utf-8"></script>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="col-md-9 body-left">
+        <div class="panel">
+
+            <div class="current-position clearfix">
+                <h4 class="col-md-2 col-xs-12 text-right">当前位置</h4>
+                <ul class="col-md-10 col-xs-12 btn-group">
+                    {% if not_feelings %}
+                    <li class="pull-left">
+                        <span>——</span>
+                        <a href="{% url 'articles_manage:study' %}" class="btn">study</a>
+                    </li>
+
+                    <li class="pull-left">
+                        <span>——</span>
+                        <a href="{% url 'articles_manage:study' %}?sort={{article_sort.id}}" class="btn">
+                            {{article.sort}}
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="pull-left">
+                        <span>——</span>
+                        <a href="{% url 'articles_manage:feelings' %}" class="btn">
+                            {{article.sort}}
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="pull-left">
+                        <span>——</span>
+                        <a href="{% url 'articles_manage:article' %}?{% if not send_sort == 0 %}sort={{send_sort}}&{% endif %}id={{article.id}}" class="btn">
+                            {{article.name}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-body article-container">
+                <div class="article-title text-center">
+                    <h3 class="title">{{article.name}}</h3>
+                    <small class="time"><span>Time:&nbsp;</span>{{article.add_time}}</small>
+                </div>
+                <div class="article-body center-block">
+                    <br />
+                  {% autoescape off %}
+                  {{article.content}}
+                  {% endautoescape %}
+                </div>
+
+                <div class="article-footer">
+                    <form id="good-click-form" class="hidden">
+                        {% csrf_token %}
+                        <input type="text" name="goodclick" value="goodclick" />
+                        <input type="submit" value="submit" />
+                        <input type="text" class="hidden" value="{{article.id}}" name="article_id" />
+                    </form>
+
+                    <h3 class="text-center good-click">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <small>{{article.good_clicks}}</small>
+                    </h3>
+
+                    {% if not pre_article == 'None' %}
+                    <a href="{% url 'articles_manage:article' %}?{% if not send_sort == 0 %}sort={{send_sort}}&{% endif %}id={{pre_article.id}}" class="pull-left">
+                        上一篇:<span>{{pre_article.name}}</span>
+                    </a>
+                    {% endif %}
+
+                    {% if not next_article == 'None' %}
+                    <a href="{% url 'articles_manage:article' %}?{% if not send_sort == 0 %}sort={{send_sort}}&{% endif %}id={{next_article.id}}" class="pull-right">
+                        下一篇:<span>{{next_article.name}}</span>
+                    </a>
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="panel comments-page">
+            <h3>Comments</h3>
+
+            <div class="panel-body message-list">
+                <button class="btn btn-primary center-block" type="button" data-target="#send-message" data-toggle="modal" id="send-message-btn">评论一下</button>
+                <ul class="media-list">
+                    {% for comment in comments.object_list %}
+                    <li class="media">
+
+                        <div class="media-object col-md-2 text-right">
+                            <img src="{{comment.image}}" class="img-circle" />
+                            <div class="triangle pull-right">
+                            </div>
+                        </div>
+                        <div class="col-md-10 message-body">
+                            <h3 class="media-heading">{{comment.username}}:</h3>
+                            <p>{{comment.message}}</p>
+                            <div class="media-bottom pull-right">
+                                <h4>{{comment.add_time}}</h4>
+                            </div>
+                        </div>
+
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <div class="row text-center">
+                    <ul class="pagination">
+                        {% if comments.has_previous %}
+                    <li id="pre-page">
+                        <a href="?{{comments.previous_page_number.querystring}}" aria-label="Previous">
+                            <span aria-hidden="true">上一页</span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for page in comments.pages %}
+                        {% if page == pre_ignore_page|add:1%}
+                        <li class="pages">
+                            <a href="?{% if not send_sort == 0 %}sort={{send_sort}}&{% endif %}id={{article.id}}&page={{pre_ignore_page}}">
+                                ...
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if page %}
+                        <li class="pages {% ifequal page comments.number %}active{% endifequal %}">
+                            <a href="?{{page.querystring}}">{{page}}</a>
+                        </li>
+                        {% endif %}
+                        {% if page|add:1 == next_ignore_page %}
+                        <li class="pages">
+                            <a href="?{% if not send_sort == 0 %}sort={{send_sort}}&{% endif %}id={{article.id}}&page={{next_ignore_page}}">
+                                ...
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if comments.has_next %}
+                    <li id="next-page">
+                        <a href="?{{comments.next_page_number.querystring}}" aria-label="Next">
+                            <span aria-hidden="true">下一页</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-md-3 body-right">
+        <div class="jumbotron">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3>Motto</h3>
+                </div>
+                <div class="panel-body">
+
+                    <p class="motto">{{writing.content}}</p>
+                    <footer class="pull-right">
+                        <span>————</span> {{writing.from_name}}
+                    </footer>
+
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3>热门标签</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="btn-group" style="width: 100%;">
+                        {% for tmp_article_sort in tmp_article_sorts %}
+                        <li class="col-md-6 col-xs-6 text-center">
+                            <a href="{% url 'articles_manage:study' %}?sort={{tmp_article_sort.article_sort.id}}" class="btn {{tmp_article_sort.color}}">
+                                {{tmp_article_sort.article_sort.name}}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3>最新文章</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group panel-list">
+                        {% for new_article in new_articles %}
+                        <li class="list-group-item">
+                            <a class="title"
+                               href="{% url 'articles_manage:article' %}?id={{new_article.id}}">
+                                <span class="pull-left">{{new_article.name}}</span>
+                                <span class="pull-right">{{new_article.add_time}}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="send-message">
+    <div class="modal-dialog">
+        <form class="modal-content" id="send-message-form">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h3 class="modal-title text-center">Comment</h3>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="head-img">选择头像</label>
+                    <div class="dropdown" id="head-img">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+
+                        <img src="/media/{{first_image.image}}" class="img-circle"/>
+                        <input type="text" name="image" class="hidden" value="/media/{{first_image.image}}" />
+
+                        </button>
+                         <input type="text" name="from_article" class="hidden" value="{{article.id}}" />
+                        <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenu1">
+                            {% for head_image in head_images %}
+                            <li>
+                                <img src="/media/{{head_image.image}}" class="img-circle center-block img-select" />
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">您的名字<span class="must-input">*必填</span></label>
+                    <input type="text" id="username" placeholder="please input your name" class="form-control" name="username" />
+                </div>
+                <div class="form-group">
+                    <label for="email">您的邮箱<span class="must-input">*必填(不公开)</span></label>
+                    <input type="text" id="email" placeholder="please input your email" class="form-control" name="email" />
+                </div>
+                <div class="form-group">
+                    <label for="address">您的网址<span class="select-input">&nbsp;选填</span></label>
+                    <input type="text" id="address" placeholder="please input your address" class="form-control" name="address" />
+                </div>
+                <div class="form-group">
+                    <label for="username">您的评论<span class="must-input">*必填</span></label>
+                    <textarea id="message" name="message" rows="10" class="form-control" placeholder="please input your comment"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="close-btn">关闭</button>
+                <button type="reset" class="btn btn-primary" id="reset-btn">重置</button>
+                <button type="button" class="btn btn-primary" id="send-btn">发送</button>
+            </div>
+        </form>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<input type="text" class="hidden" id="send_sort" value="{{send_sort}}" />
+<input type="text" class="hidden" id="article_id" value="{{article.id}}" />
+<div class="col-md-6 col-lg-push-3 text-center center-block alert-danger hidden">
+    <h1>请填写好所有必填内容，谢谢!</h1>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+    $(function() {
+        new MessageOperation("{% url 'operation:send_comment' %}");
+        new GoodClick("{% url 'operation:send_good_clicks' %}");
+    });
+</script>
+{% endblock %}

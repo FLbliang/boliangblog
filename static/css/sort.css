@@ -1,0 +1,30 @@
+.current-position {
+	color: #FFFFFF;
+}
+
+.current-position .col-md-2,
+.current-position .col-md-10 {
+	padding: 0px;
+}
+
+.current-position ul {
+	margin: 0px;
+	margin-top: 2px;
+}
+
+.current-position .btn {
+	padding-left: 0px;
+	padding-right: 0px;
+	box-shadow: none;
+	outline: none;
+}
+
+.current-position a {
+	color: deepskyblue;
+}
+
+.current-position a:hover,
+.current-position a:active,
+.current-position a:focus {
+	color: orangered;
+}

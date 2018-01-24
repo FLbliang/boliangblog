@@ -1,0 +1,1 @@
+default_app_config = 'photos_manage.apps.PhotosManageConfig'

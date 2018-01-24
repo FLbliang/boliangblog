@@ -1,0 +1,85 @@
+{% extends 'public.html' %}
+
+{% block title %}About Me{% endblock %}
+
+{% block css %}
+	<link rel="stylesheet" type="text/css" href="/static/css/public.css" />
+	<link rel="stylesheet" type="text/css" href="/static/css/study.css" />
+	<link rel="stylesheet" type="text/css" href="/static/css/about.css" />
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+				<div class="col-md-8 body-left">
+					<div class="panel">
+						<div class="panel-heading">
+							<h1 class="text-center">About Me</h1>
+						</div>
+						<div class="panel-body">
+							<div class="col-md-4 img-me text-center">
+								<img src="/media/{{about_me.image}}" class="img-rounded" />
+							</div>
+							<div class="col-md-8 desc-body">
+								{% autoescape off %}
+								{{about_me.desc}}
+								{% endautoescape %}
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 body-right">
+					<div class="jumbotron">
+						<div class="panel">
+							<div class="panel-heading" style="background: transparent;">
+								<img src="/media/{{about_me.head_image}}" class="img-circle img center-block" />
+							</div>
+							<div class="panel-body">
+								<ul class="list-group desc-me">
+									<li class="list-group-item">
+										OWNER: <span>{{about_me.name}}</span>
+									</li>
+									<li class="list-group-item">
+										AGE: <span>{{about_me.age}}</span>
+									</li>
+									<li class="list-group-item">
+										JOB: <span>{{about_me.job}}</span>
+									</li>
+									<li class="list-group-item">
+										QQ: <span>{{about_me.qq}}</span>
+									</li>
+									<li class="list-group-item">
+										HOBBIES: <span>{{about_me.hobbies}}</span>
+									</li>
+									<li class="list-group-item">
+										MOTTO: <span>{{about_me.motto}}</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="panel">
+							<div class="panel-heading">
+								<h3>最新文章</h3>
+							</div>
+							<div class="panel-body">
+								<ul class="list-group panel-list">
+									{% for article in articles %}
+									<li class="list-group-item">
+										<a class="title" href="{% url 'articles_manage:article' %}?id={{article.id}}">
+											<span class="pull-left">{{article.name}}</span>
+											<span class="pull-right">{{article.add_time}}</span>
+										</a>
+									</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+{% endblock %}
+
+
+

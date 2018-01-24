@@ -1,0 +1,125 @@
+{% extends 'public.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="/static/css/public.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+    <div class="col-md-6">
+
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+            </ol>
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+
+                {% for photo_show in photo_shows %}
+                <div class="item {% if forloop.counter == 1 %}active{% endif %}">
+                    <img src="/media/{{photo_show.image}}"
+                         alt="photo" class="center-block img img-rounded">
+                    <div class="carousel-caption">
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Controls -->
+            <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+    </div>
+    <div class="col-md-6 home-write-page">
+
+        <div class="media">
+            <a class="pull-left" href="#">
+                <img class="media-object img-circle" src="/media/{{about_me.head_image}}" alt="head image">
+            </a>
+            <div class="media-body">
+                <h3 class="media-heading"><strong>关注我</strong></h3>
+                <div>
+                    <p>GitHub:
+                        <a href="{{about_me.github}}">{{about_me.github}}</a>
+                    </p>
+                    <p>微博:
+                        <a href="{{about_me.weiblog}}">{{about_me.weiblog}}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="jumbotron">
+            <div class="row">
+                <div class="col-md-2">
+                    <img src="/static/img/write.png" />
+                </div>
+                <div class="col-md-9 col-md-push-1">
+                    <h2><strong>随笔吹吹水</strong></h2>
+                </div>
+            </div>
+            <div class="row">
+                <p>
+                    <span class="glyphicon glyphicon-pencil"></span>
+                   {{writing.content}}
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="container">
+    <div class="row text-center">
+        <div class="panel col-md-8 bottom-left">
+            <div class="panel-heading">
+                <h3><strong>最新文章</strong></h3>
+            </div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    {% for article in articles %}
+                    <li class="list-group-item">
+                        <a class="title" href="{% url 'articles_manage:article' %}?id={{article.id}}">
+                            <span class="pull-left">{{article.name}}</span>
+                            <span class="pull-right">{{article.add_time}}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <a href="{% url 'articles_manage:study' %}" class="btn btn-primary col-md-6 col-md-push-3">More</a>
+            </div>
+        </div>
+
+        <div class="panel col-md-4 bottom-right">
+            <div class="panel-heading">
+                <h3><strong>常用链接</strong></h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    {% for link in links %}
+                    <div class="col-md-6">
+                        <a href="{{link.url}}">{{link.name}}</a>
+                    </div>
+                    {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
